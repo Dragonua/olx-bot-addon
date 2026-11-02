@@ -5,6 +5,7 @@ description: "Telegram-бот OLX + AI-агент пошуку. Код підт�
 arch: [amd64, aarch64]
 startup: application
 boot: auto
+host_network: true
 options:
   bot_token: ""
   admin_chat_id: ""

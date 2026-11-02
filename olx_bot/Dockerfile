@@ -1,5 +1,5 @@
 FROM python:3.11-slim
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates \
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates socat \
     && rm -rf /var/lib/apt/lists/*
 COPY run.sh /run.sh
 RUN chmod a+x /run.sh

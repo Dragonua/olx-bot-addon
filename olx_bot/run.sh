@@ -43,4 +43,14 @@ if [ ! -x "$DATA/venv/bin/python" ] || [ "$(cat "$DATA/req.sha" 2>/dev/null)" !=
   echo "$SUM" > "$DATA/req.sha"
 fi
 cd "$APP"
+
+# socat relay: проксіює TLS-з'єднання з Railway до meta.ua через домашній NUC.
+# Railway не може підключитись до pop.meta.ua / smtp.meta.ua напряму (IBM/SoftLayer блокується).
+# Тут встановлюється прозорий TLS-тунель: Railway → socat (порт 19995/19465) → meta.ua.
+# mail-mcp на Railway підключається до host.docker.internal:19995 / :19465 з security: plain,
+# бо TLS вже завершується socat'ом (OPENSSL клієнт → meta.ua).
+socat TCP4-LISTEN:19995,fork,reuseaddr OPENSSL:pop.meta.ua:995,verify=0 &
+socat TCP4-LISTEN:19465,fork,reuseaddr OPENSSL:smtp.meta.ua:465,verify=0 &
+echo "socat relays started: :19995 → pop.meta.ua:995, :19465 → smtp.meta.ua:465"
+
 exec "$DATA/venv/bin/python" bot.py
