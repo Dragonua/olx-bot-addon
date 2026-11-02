@@ -1,5 +1,5 @@
 name: "OLX Bot (Serch)"
-version: "1.0.0"
+version: "1.0.1"
 slug: olx_bot
 description: "Telegram-бот OLX + AI-агент пошуку. Код підтягується з GitHub при кожному старті."
 arch: [amd64, aarch64]
