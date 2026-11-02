@@ -45,12 +45,14 @@ fi
 cd "$APP"
 
 # socat relay: проксіює TLS-з'єднання з Railway до meta.ua через домашній NUC.
-# Railway не може підключитись до pop.meta.ua / smtp.meta.ua напряму (IBM/SoftLayer блокується).
-# Тут встановлюється прозорий TLS-тунель: Railway → socat (порт 19995/19465) → meta.ua.
-# mail-mcp на Railway підключається до host.docker.internal:19995 / :19465 з security: plain,
+# Railway не може підключитись до imap.meta.ua / smtp.meta.ua напряму (IBM/SoftLayer блокується).
+# Тут встановлюється прозорий TLS-тунель: Railway → socat (порт 19993/19465) → meta.ua.
+# mail-mcp на Railway підключається до localhost:19993 / :19465 з security: plain,
 # бо TLS вже завершується socat'ом (OPENSSL клієнт → meta.ua).
-socat TCP4-LISTEN:19995,fork,reuseaddr OPENSSL:pop.meta.ua:995,verify=0 &
+# IMAP relay: порт 19993 → imap.meta.ua:993 (IMAP over TLS)
+socat TCP4-LISTEN:19993,fork,reuseaddr OPENSSL:imap.meta.ua:993,verify=0 &
+# SMTP relay: порт 19465 → smtp.meta.ua:465 (SMTP over TLS)
 socat TCP4-LISTEN:19465,fork,reuseaddr OPENSSL:smtp.meta.ua:465,verify=0 &
-echo "socat relays started: :19995 → pop.meta.ua:995, :19465 → smtp.meta.ua:465"
+echo "socat relays started: :19993 → imap.meta.ua:993, :19465 → smtp.meta.ua:465"
 
 exec "$DATA/venv/bin/python" bot.py
