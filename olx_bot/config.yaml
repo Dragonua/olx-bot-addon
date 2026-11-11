@@ -1,5 +1,5 @@
 name: "OLX Bot (Serch)"
-version: "1.0.1"
+version: "1.0.2"
 slug: olx_bot
 description: "Telegram-бот OLX + AI-агент пошуку. Код підтягується з GitHub при кожному старті."
 arch: [amd64, aarch64]
@@ -7,6 +7,8 @@ startup: application
 boot: auto
 host_network: true
 options:
+  olx_account_snapshot: "{}"
+  olx_sync_budget: "{}"
   bot_token: ""
   admin_chat_id: ""
   gh_token: ""
@@ -15,6 +17,8 @@ options:
   freellm_base_url: "https://freellmapi-production-fdd1.up.railway.app/v1"
   olx_proxy: ""
 schema:
+  olx_account_snapshot: str?
+  olx_sync_budget: str?
   bot_token: password
   admin_chat_id: str
   gh_token: password
